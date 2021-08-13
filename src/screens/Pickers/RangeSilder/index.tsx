@@ -1,4 +1,6 @@
-import React from 'react'
+import { random } from 'lodash'
+import React,{useState} from 'react'
+import { Button } from 'react-native'
 import { StyleSheet, Text, View } from 'react-native'
 import RangeSilder from 'src/components/RangeSlider'
 
@@ -35,9 +37,25 @@ interface Props {
 
 
 const index = (props: Props) => {
+    const [values, setValues] = useState<{min: number, max: number}>({min:0,max:5})
+    const onChange = (values:any)=>{
+        setValues(values)
+    }
     return (
         <View style={styles.root}>
-            <RangeSilder options={mockData}/>
+            <RangeSilder options={mockData} initValues={values} onChange={onChange}/>
+            <View style={{marginTop:16,justifyContent:"center",alignItems:'center'}}>
+                <Text>Values: min:{values.min} max:{values.max}</Text>
+                <Button title='Random' onPress={()=>{
+                    const rand1 = random(0,5)
+                    const rand2 = random(0,5)
+                    setValues({
+                        min:Math.min(rand1,rand2),
+                        max:Math.max(rand1,rand2)
+                    })
+                }}>
+                </Button>
+            </View>
         </View>
     )
 }

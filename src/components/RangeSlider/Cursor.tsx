@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { HEIGHT,PADDINGH } from './constants'
-import Animated,{useAnimatedStyle,useDerivedValue,withTiming,useSharedValue,useAnimatedGestureHandler} from 'react-native-reanimated'
+import Animated,{useAnimatedStyle,useDerivedValue,withTiming,useSharedValue,useAnimatedGestureHandler, runOnJS} from 'react-native-reanimated'
 import {PanGestureHandler, PanGestureHandlerEventPayload, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
 import { snapPoint,ReText } from 'react-native-redash'
 
@@ -10,10 +10,11 @@ interface Props {
     x: Animated.SharedValue<number>,
     snapPoints: Array<number>,
     maxWidth: number,
+    onMoveEnd:Function
 }
 
 const Cursor: React.FC<Props> = (props) => {
-    const {label,snapPoints,maxWidth} = props
+    const {label,snapPoints,maxWidth,onMoveEnd} = props
     const contextX = useSharedValue<number>(0)
     const onGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
         onStart:(_)=>{
@@ -23,7 +24,11 @@ const Cursor: React.FC<Props> = (props) => {
             props.x.value = translationX + contextX.value
         },
         onEnd:({velocityX})=>{
-            props.x.value = withTiming(snapPoint(props.x.value,0,snapPoints))
+            props.x.value = withTiming(snapPoint(props.x.value,0,snapPoints),{},(isFinished)=>{
+                if(isFinished){
+                    runOnJS(onMoveEnd)()
+                }
+            })
             contextX.value = Math.min(Math.max(props.x.value,0),maxWidth - HEIGHT)
         }
     })
