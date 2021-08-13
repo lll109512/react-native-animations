@@ -27,29 +27,33 @@ const index: React.FC<Props> = (props) => {
     const {options,initValues,onChange} = props
     const [positions, setPositions] = useState<Array<LayoutRectangle>>([])
     const [maxWidth, setMaxWidth] = useState<number>(0)
+    const [isInit, setIsInit] = useState<boolean>(false)
     const snapPoints = positions.map((item)=> item.x - HEIGHT/2 + item.width /2)
     const widths = positions.map(item=> item.width)
     const CursorOneX = useSharedValue<number>(0)
     const CursorTwoX = useSharedValue<number>(0)
     
     useEffect(() => {
-        if(maxWidth && snapPoint && initValues){
-            if(initValues?.min){
-                CursorOneX.value = snapPoints[findIndex(options,{value:Math.min(initValues.min,initValues.max)})]
-            }else{
-                CursorOneX.value = snapPoint(0,0,snapPoints)
-            }
-            if(initValues?.max){
-                CursorTwoX.value = snapPoints[findIndex(options,{value:Math.max(initValues.min,initValues.max)})]
-            }else{
-                CursorTwoX.value = snapPoint(maxWidth,0,snapPoints)
+        if(maxWidth && snapPoints && snapPoints.length === options.length && initValues){
+            if(!isInit){
+                if(initValues?.min){
+                    CursorOneX.value = snapPoints[findIndex(options,{value:Math.min(initValues.min,initValues.max)})]
+                }else{
+                    CursorOneX.value = snapPoint(0,0,snapPoints)
+                }
+                if(initValues?.max){
+                    CursorTwoX.value = snapPoints[findIndex(options,{value:Math.max(initValues.min,initValues.max)})]
+                }else{
+                    CursorTwoX.value = snapPoint(maxWidth,0,snapPoints)
+                }
+                setIsInit(true)
             }
 
         }
-    }, [maxWidth,snapPoint])
+    }, [maxWidth,snapPoints,initValues])
 
     useEffect(() => {
-        if(maxWidth && snapPoint && initValues){
+        if(maxWidth && snapPoints && initValues){
             if(CursorOneX.value > CursorTwoX.value){
                 CursorOneX.value = withTiming(snapPoints[findIndex(options,{value:Math.max(initValues.min,initValues.max)})])
                 CursorTwoX.value = withTiming(snapPoints[findIndex(options,{value:Math.min(initValues.min,initValues.max)})])
