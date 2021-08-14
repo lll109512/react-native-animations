@@ -104,7 +104,6 @@
 				3B6553FA1DD437C7F8D0C120 /* Pods-reactNativeAnimationsTypescript-reactNativeAnimationsTypescriptTests.debug.xcconfig */,
 				D9A501E3D0FEDDD20E882D36 /* Pods-reactNativeAnimationsTypescript-reactNativeAnimationsTypescriptTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
