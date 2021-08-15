@@ -4,6 +4,7 @@ import faker from "faker";
 import Animated,{useAnimatedStyle, useSharedValue,useAnimatedScrollHandler, interpolate} from 'react-native-reanimated'
 import {images} from 'src/data/data'
 import FastImage from 'react-native-fast-image';
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
@@ -42,7 +43,7 @@ const RenderItem = ({ item, index, translateX }) => {
     );
 };
 
-const index = (props) => {
+const index = ({ navigation }) => {
     const translateX = useSharedValue(0);
     const onScroll = useAnimatedScrollHandler({
         onScroll: ({ contentOffset: { x } }) => {
@@ -51,6 +52,21 @@ const index = (props) => {
     });
     return (
         <View>
+            <AntDesign
+                name="arrowleft"
+                size={24}
+                color={"#000"}
+                style={{
+                    paddingHorizontal: 12,
+                    position: "absolute",
+                    top: 40,
+                    left: 10,
+                    zIndex: 2,
+                }}
+                onPress={() => {
+                    navigation.goBack();
+                }}
+            />
             <AnimatedFlatList
                 data={images}
                 keyExtractor={item => item.key}
@@ -65,7 +81,7 @@ const index = (props) => {
             />
         </View>
     );
-}
+};
 
 export default index
 
