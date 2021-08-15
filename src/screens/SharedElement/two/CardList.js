@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { StatusBar, StyleSheet, Text, View,FlatList,Dimensions, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import faker from 'faker'
 import Animated,{useAnimatedGestureHandler, useSharedValue,interpolate, timing, withTiming, useAnimatedStyle} from 'react-native-reanimated'
 // import { Image } from "react-native-animatable";
 import { Directions, FlingGestureHandler, State } from "react-native-gesture-handler";
@@ -44,6 +43,7 @@ const RenderItem = ({ item, animatedValue, index, navigation,activeIndex }) => {
             ]}
         >
             <TouchableOpacity
+                activeOpacity={1}
                 onPress={() => navigation.push("CardDetail", { item: fakeData[activeIndex] })}
             >
                 <SharedElement id={`item.${item.key}.photo`}>
