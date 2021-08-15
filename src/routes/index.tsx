@@ -4,6 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import RangeSilder from 'src/screens/Pickers/RangeSilder' 
 import TimeRangePicker from 'src/screens/Pickers/TimeRangePicker' 
 import SharedElementOne from 'src/screens/SharedElement/one/SharedOneRoutes' 
+import SharedElementTwo from 'src/screens/SharedElement/two' 
 import Home from 'src/screens/Home' 
 const Drawer = createDrawerNavigator();
 
@@ -15,6 +16,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="RangeSilder" component={RangeSilder} options={{title:"Range slider"}}/>
             <Drawer.Screen name="TimeRangePicker" component={TimeRangePicker} />
             <Drawer.Screen name="sharedElementOne" component={SharedElementOne} options={{headerShown:false,title:"Travel list"}}/>
+            <Drawer.Screen name="sharedElementTwo" component={SharedElementTwo} options={{headerShown:false,title:"Travel card"}}/>
         </Drawer.Navigator>
     )
 }
