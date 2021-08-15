@@ -7,6 +7,8 @@ import Animated,{useAnimatedGestureHandler, useSharedValue,interpolate, timing, 
 import { Directions, FlingGestureHandler, State } from "react-native-gesture-handler";
 import { SharedElement } from "react-navigation-shared-element";
 import {images} from 'src/data/data'
+import FastImage from "react-native-fast-image";
+
 
 const screen = Dimensions.get('screen')
 
@@ -33,6 +35,7 @@ const RenderItem = ({ item, animatedValue, index, navigation,activeIndex }) => {
     });
     return (
         <Animated.View
+            key={index}
             style={[
                 {
                     position: "absolute",
@@ -44,7 +47,7 @@ const RenderItem = ({ item, animatedValue, index, navigation,activeIndex }) => {
                 onPress={() => navigation.push("CardDetail", { item: fakeData[activeIndex] })}
             >
                 <SharedElement id={`item.${item.key}.photo`}>
-                    <Image source={{ uri: item.image }} style={styles.image} />
+                    <FastImage source={{ uri: item.image }} style={styles.image} />
                 </SharedElement>
                 <View
                     style={{
@@ -67,19 +70,10 @@ const RenderItem = ({ item, animatedValue, index, navigation,activeIndex }) => {
 const CardList = ({navigation}) => {
     const [activeIndex, setActiveIndex] = useState(0)
     const animatedValue = useSharedValue(0)
-    // const animatedValue = useSharedValue(0)
-    console.log(fakeData);
-    // useEffect(() => {
-    //     effect
-    //     return () => {
-    //         cleanup
-    //     } 
-    // }, [])
     return (
         <FlingGestureHandler
             key="up"
             direction={Directions.UP}
-            // onGestureEvent={onUpGenstureHandler}
             onHandlerStateChange={ev=>{
                 if(ev.nativeEvent.state === State.END){
                     if(activeIndex===fakeData.length-1) return
@@ -92,7 +86,7 @@ const CardList = ({navigation}) => {
                 <FlingGestureHandler
                     key="up"
                     direction={Directions.DOWN}
-                    // onGestureEvent={onUpGenstureHandler}
+    
                     onHandlerStateChange={ev=>{ 
                         if(ev.nativeEvent.state === State.END){
                             if (activeIndex === 0 ) return;
