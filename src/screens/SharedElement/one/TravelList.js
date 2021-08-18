@@ -14,7 +14,7 @@ import Animated, {
 import { SharedElement } from "react-navigation-shared-element";
 const { ITEM_HEIGHT, ITEM_WIDTH, FULL_SIZE, RADIUS } = spec;
 
-const AnimatedFlastList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedText = Animated.createAnimatedComponent(Text);
 
 const ItemCard = props => {
@@ -79,7 +79,7 @@ const TravelList = props => {
     });
     return (
         <SafeAreaView>
-            <AnimatedFlastList
+            <AnimatedFlatList
                 data={images}
                 keyExtractor={item => `${item.key}`}
                 horizontal

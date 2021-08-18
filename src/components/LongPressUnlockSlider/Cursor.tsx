@@ -6,8 +6,6 @@ import {CIRCLE,PADDING} from './constants.js'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useRef } from 'react'
 import { mixColor } from 'react-native-redash'
-
-// const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign)
 interface Props {
     iconName: string,
     translateX: Animated.SharedValue<number>,
@@ -19,7 +17,6 @@ interface Props {
 }
 
 const Cursor = (props: Props) => {
-    // const [cursorActived, setCursorActived] = useState<boolean>(false)
     const rightSideMaxX = props.maxWidth - CIRCLE - PADDING * 2
     const contextX = useSharedValue<number>(0)
     const cursorActived = useSharedValue<boolean>(false)
@@ -28,9 +25,6 @@ const Cursor = (props: Props) => {
     const onGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
         onStart:()=>{
             contextX.value = props.translateX.value
-            // if(cursorActived.value){
-            //     runOnJS(props.setIsDraging)(true)
-            // }
         },
         onActive:({translationX,x})=>{
             if(cursorActived.value){
@@ -47,9 +41,6 @@ const Cursor = (props: Props) => {
             }
              cursorActived.value = false
         },
-        // onFinish:()=>{
-        //     runOnJS(props.setIsDraging)(false)
-        // }
     })
     const inRangeX = useDerivedValue(()=>{
         return Math.min(Math.max(props.translateX.value,0),rightSideMaxX)
@@ -90,7 +81,6 @@ const Cursor = (props: Props) => {
             <View style={{width:CIRCLE}}>
                 <PanGestureHandler onGestureEvent={onGestureHandler} ref={panHandlerRef}>
                     <Animated.View style={[styles.root,style]}>
-                        {/* <Text>Drag</Text> */}
                         <AntDesign name={props.iconName} size={30}/>
                     </Animated.View>
                 </PanGestureHandler>
