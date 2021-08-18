@@ -1,23 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList, Dimensions, StatusBar, TouchableOpacity } from "react-native";
-import faker from "faker";
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    useAnimatedScrollHandler,
-    interpolate,
-} from "react-native-reanimated";
-import { images } from "src/data/data";
 import FastImage from "react-native-fast-image";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import Config from "react-native-config";
 import { SPACING } from "src/screens/SharedElement/one/constants";
 
 const {height,width} = Dimensions.get('screen')
 const TINY_SIZE = 60
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 
 const API_URL = "https://api.pexels.com/v1/search?query=nature&orientation=portrait&size=small&per_page=20"
 
