@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4.0.0-alpha.28",
     "@react-navigation/drawer": "^5.x",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/native-stack": "^5.x",
@@ -29,6 +30,7 @@
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
     "react-native-shared-element": "^0.8.0",
+    "react-native-svg": "^12.1.1",
     "react-native-vector-icons": "^8.1.0",
     "react-navigation-shared-element": "^5.0.0-alpha1"
   },
