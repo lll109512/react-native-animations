@@ -12,6 +12,7 @@ import Playground from 'src/screens/BottomSheet/Playground'
 import RotaryLogin from 'src/screens/RotartLogin/index' 
 import BottomTabNavigator1 from 'src/screens/BottomTabNavigator1' 
 import ScrollViewAnimatedHeader from 'src/screens/FlatList/AnimatedHeader/ScrollView' 
+import ScrollViewAnimatedHeaderTwo from 'src/screens/FlatList/AnimatedHeader/ScrollViewTwo' 
 import Home from 'src/screens/Home' 
 const Drawer = createDrawerNavigator();
 
@@ -30,6 +31,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="RotaryLogin" component={RotaryLogin} options={{headerShown:false,title:"Rotary login"}}/>
             <Drawer.Screen name="BottomTabNavigator1" component={BottomTabNavigator1} options={{headerShown:false,title:"Bottom tab navigator 1"}}/>
             <Drawer.Screen name="ScrollViewAnimatedHeader" component={ScrollViewAnimatedHeader} options={{headerShown:false,title:"Animated header"}}/>
+            <Drawer.Screen name="ScrollViewAnimatedHeaderTwo" component={ScrollViewAnimatedHeaderTwo} options={{headerShown:false,title:"Animated header two"}}/>
             <Drawer.Screen name="BottomsheetPlayground" component={Playground} options={{headerShown:false,title:"Bottom sheet play ground"}}/>
         </Drawer.Navigator>
     )
