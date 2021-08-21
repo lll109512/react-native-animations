@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
 
 const blockValue = (oldVal:number,newVal:number)=>{
   "worklet";
+  console.log(oldVal,newVal)
   if((oldVal > 1.5 * PI && newVal < PI /2)|| newVal===0){
     return 2 * PI
   }
@@ -42,13 +43,14 @@ const Gesture = ({ theta,passcode }: GestureProps) => {
         },
         onActive: ({ x, y },ctx) => {
             const newValue = normalizeRad(canvas2Polar({x,y},{x:RADIUS,y:RADIUS}).theta)
+            // console.log(newValue)
             theta.value = blockValue(ctx.offset,newValue)
             ctx.offset = theta.value
         },
         onEnd:()=>{
             const val = Math.round(theta.value / DELTA)+1
-            console.log(val)
-            passcode.value += `${val===10?0:val}`
+            // console.log(val)
+            passcode.value += `${val===10?0:val>10?'':val}` // fix larger than 10
             theta.value = withSpring(2*PI)
         }
     });

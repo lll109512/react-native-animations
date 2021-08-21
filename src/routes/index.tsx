@@ -9,7 +9,8 @@ import ParalleFlatList from 'src/screens/FlatList/ParalleFlatList'
 import SyncFlatList from 'src/screens/FlatList/SyncFlatList' 
 import LongPressUnlockSlider from 'src/screens/LongPressUnlockSlider' 
 import Playground from 'src/screens/BottomSheet/Playground' 
-import RotaryLogin from 'src/screens/RotartLogin/index.ts' 
+import RotaryLogin from 'src/screens/RotartLogin/index' 
+import BottomTabNavigator1 from 'src/screens/BottomTabNavigator1' 
 import Home from 'src/screens/Home' 
 const Drawer = createDrawerNavigator();
 
@@ -26,6 +27,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="ParalleFlatList" component={ParalleFlatList} options={{headerShown:false,title:"Paralle list"}}/>
             <Drawer.Screen name="SyncFlatList" component={SyncFlatList} options={{headerShown:false,title:"Sync list"}}/>
             <Drawer.Screen name="RotaryLogin" component={RotaryLogin} options={{headerShown:false,title:"Rotary login"}}/>
+            <Drawer.Screen name="BottomTabNavigator1" component={BottomTabNavigator1} options={{headerShown:false,title:"Bottom tab navigator 1"}}/>
             <Drawer.Screen name="BottomsheetPlayground" component={Playground} options={{headerShown:false,title:"Bottom sheet play ground"}}/>
         </Drawer.Navigator>
     )

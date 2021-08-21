@@ -13,7 +13,7 @@ import Quadrant, {
 import Gesture from "./Gesture";
 import Title from "./Title";
 import Status from "./Status";
-import { transformOrigin } from "react-native-redash";
+import { PI, transformOrigin } from "react-native-redash";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedG = Animated.createAnimatedComponent(G);
@@ -43,7 +43,7 @@ const Digit = ({ cx, cy, i }: DigitProps) => {
 };
 
 const RotaryLogin = () => {
-  const theta = useSharedValue<number>(0)
+  const theta = useSharedValue<number>(2*PI)
   const passcode = useSharedValue("")
   const r = RADIUS - STROKE_WIDTH / 2;
   const circumference = 2 * Math.PI * r;
