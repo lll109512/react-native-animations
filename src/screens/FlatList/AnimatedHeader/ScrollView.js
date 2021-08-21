@@ -20,7 +20,7 @@ const AnimatedScrollHeader = (props) => {
         };
     })
     const coverStyle = useAnimatedStyle(()=>{
-        const opacity = interpolate(offsetY.value,[0,100],[0.2,0.7],Extrapolate.CLAMP)
+        const opacity = interpolate(offsetY.value,[0,100],[0,0.7],Extrapolate.CLAMP)
         return {
             opacity: opacity,
         };
@@ -82,9 +82,15 @@ const AnimatedScrollHeader = (props) => {
                     </Text>
                 </Animated.View>
             </Animated.View>
-            <Animated.ScrollView onScroll={scrollHandler} scrollEventThrottle={16}>
+            <Animated.ScrollView style={{
+                borderTopRightRadius:16,
+                borderTopLeftRadius:16,
+                transform:[{translateY:-16,}],
+                marginBottom:-16,
+            }} onScroll={scrollHandler} scrollEventThrottle={16}>
                 <View>
-                    <View style={{ backgroundColor: "red", height: 100, padding: 12 }}></View>
+                    <View style={{ backgroundColor: "red", height: 100, padding: 12 }}>
+                    </View>
                     <View style={{ backgroundColor: "blue", height: 200, padding: 12 }}></View>
                     <View style={{ backgroundColor: "orange", height: 100, padding: 12 }}></View>
                     <View style={{ backgroundColor: "red", height: 400, padding: 12 }}></View>
