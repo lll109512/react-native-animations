@@ -31,7 +31,7 @@ const index = props => {
     
     useEffect(() => {
         // much more easy than tutroial XD
-        bottomListRef.current.scrollToIndex({ index: selectedIndex, animated: true, viewOffset:width/2-TINY_SIZE+SPACING*2});
+        bottomListRef.current?.scrollToIndex({ index: selectedIndex, animated: true, viewOffset:width/2-TINY_SIZE+SPACING*2});
     }, [selectedIndex])
 
     if (!data){
