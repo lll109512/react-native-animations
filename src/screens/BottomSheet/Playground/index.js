@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useCallback } from "react";
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,Dimensions, FlatList } from 'react-native'
 import BottomSheet, {
     BottomSheetBackdrop,
     BottomSheetFlatList,
@@ -7,7 +7,15 @@ import BottomSheet, {
     BottomSheetModal,
     BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
-import Animated,{ interpolateColor, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Animated,{ Extrapolate, interpolate, interpolateColor, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import FastImage from "react-native-fast-image";
+import { images } from "src/data/data";
+const {width,height} = Dimensions.get('screen')
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
+const PADDING = 24
 
 const CustomBackground = ({ style, animatedIndex }) => {
     //#region styles
@@ -34,7 +42,7 @@ const index = (props) => {
     const animatedIndex = useSharedValue(0)
 
     // variables
-    const snapPoints = useMemo(() => ["25%", "50%"], []);
+    const snapPoints = useMemo(() => ["14%", "60%"], []);
 
     // callbacks
     const handleSheetChanges = useCallback((index) => {
@@ -62,23 +70,70 @@ const index = (props) => {
         []
     );
 
-    return (
-        <BottomSheetModalProvider>
-            <View style={styles.container}>
-                <Button onPress={handlePresentModalPress} title="Present Modal" color="black" />
-                <BottomSheetModal
-                    ref={bottomSheetModalRef}
-                    index={1}
-                    snapPoints={snapPoints}
-                    onChange={handleSheetChanges}
-                >
-                    <View style={styles.contentContainer}>
-                        <Text>Awesome 🎉</Text>
-                    </View>
-                </BottomSheetModal>
-            </View>
-        </BottomSheetModalProvider>
-    );
+    const imageStyle = useAnimatedStyle(()=>{
+        const scale = interpolate(animatedIndex.value, [1, 0], [1, 0.25], Extrapolate.CLAMP);
+        const left = interpolate(animatedIndex.value, [1, 0], [0, -150], Extrapolate.CLAMP);
+        const top = interpolate(animatedIndex.value, [1, 0], [20, -90], Extrapolate.CLAMP);
+        return {
+            transform: [{ scale }],
+            position:"absolute",
+            left,
+            top,
+        };
+    })
+
+    const textsStyle = useAnimatedStyle(() => {
+        const left = interpolate(animatedIndex.value, [1, 0], [width * 0.2, width * 0.6 * 0.25 + 10],Extrapolate.CLAMP);
+        const top = interpolate(animatedIndex.value, [1, 0], [width * 0.7, 5], Extrapolate.CLAMP);
+        // const opacity = interpolate(animatedIndex.value, [1, 0.5, 0], [1,0.2,1], Extrapolate.CLAMP);
+        const scale = interpolate(animatedIndex.value, [1, 0], [1, 0.8], Extrapolate.CLAMP);
+        return {
+            transform: [{ scale }],
+            left,
+            position: "absolute",
+            top,
+            zIndex: -1,
+        };
+    });
+
+    const subTitleStyle = useAnimatedStyle(() => {
+        const left = interpolate(animatedIndex.value, [1, 0], [width * 0.25, 0],Extrapolate.CLAMP);
+        return {
+            left,
+            marginTop:5
+        };
+    });
+
+    const playStyle = useAnimatedStyle(() => {
+        const opacity = interpolate(animatedIndex.value, [0.2, 0], [0, 1], Extrapolate.CLAMP);
+        return {
+            // left,
+            opacity,
+            right: 20,
+            top:20,
+            position:"absolute"
+        };
+    });
+
+    const controlStyle = useAnimatedStyle(() => {
+        const opacity = interpolate(animatedIndex.value, [1, 0.8], [1, 0.3], Extrapolate.CLAMP);
+        return {
+            opacity,
+        };
+    });
+    const controlStyle2 = useAnimatedStyle(() => {
+        const opacity = interpolate(animatedIndex.value, [1, 0.8], [1, 0.3], Extrapolate.CLAMP);
+        return {
+            opacity,
+        };
+    });
+    const controlStyle3 = useAnimatedStyle(() => {
+        const opacity = interpolate(animatedIndex.value, [1, 0.7], [1, 0], Extrapolate.CLAMP);
+        return {
+            opacity,
+        };
+    });
+
     return (
         <View
             style={{
@@ -93,22 +148,77 @@ const index = (props) => {
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
                 // backgroundComponent={CustomBackground}
-                // backdropComponent={BottomSheetBackdrop}
+                backdropComponent={BottomSheetBackdrop}
                 animatedIndex={animatedIndex}
             >
-                {/* <View style={styles.contentContainer}> */}
-                {/* <Text>Awesome 🎉</Text> */}
-                {/* <Animated.View style={[{backgroundColor:'red',height:30,width:30,borderRadius:15},circleStyle]}/> */}
-                {/* <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-                        {data.map(renderItem)}
-                    </BottomSheetScrollView> */}
-                {/* </View> */}
-                <BottomSheetFlatList
-                    data={data}
-                    keyExtractor={i => i}
-                    renderItem={renderItem}
-                    contentContainerStyle={styles.contentContainer}
-                />
+                <View style={[styles.contentContainer]}>
+                    <Animated.View style={[imageStyle]}>
+                        <AnimatedFlatList
+                            keyExtractor={item => `${item.key}`}
+                            data={images}
+                            horizontal
+                            bounces={false}
+                            // pagingEnabled
+                            decelerationRate="fast"
+                            snapToInterval={width * 0.6 + PADDING * 2}
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{
+                                paddingHorizontal: width * 0.2 - PADDING,
+                                // backgroundColor:'red'
+                            }}
+                            renderItem={({ item, index }) => (
+                                <View
+                                    style={{
+                                        width: width * 0.6,
+                                        height: width * 0.6,
+                                        marginHorizontal: PADDING,
+                                    }}
+                                >
+                                    <AnimatedFastImage
+                                        source={{ uri: item.image }}
+                                        style={[styles.image, StyleSheet.absoluteFillObject]}
+                                    />
+                                </View>
+                            )}
+                        />
+                    </Animated.View>
+                    <Animated.View style={[textsStyle]}>
+                        <Text
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                            style={{ fontSize: 20, fontWeight: "500" }}
+                        >
+                            Echo of Starsong (feat.Eda)
+                        </Text>
+                        <Animated.View style={[subTitleStyle]}>
+                            <Text
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
+                                style={{
+                                    fontSize: 18,
+                                    fontWeight: "500",
+                                    color: "rgba(0,0,0,0.6)",
+                                }}
+                            >
+                                OPUS
+                            </Text>
+                        </Animated.View>
+                    </Animated.View>
+                    <Animated.View style={[styles.progressContainer, controlStyle3]}>
+                        <View style={[styles.progressBar]} />
+                        <View style={[styles.cursor]} />
+                    </Animated.View>
+                    <Animated.View style={[styles.play, controlStyle]}>
+                        <AntDesign name="caretright" size={45} />
+                    </Animated.View>
+                    <Animated.View style={[styles.beforeAfter, controlStyle2]}>
+                        <AntDesign name="stepbackward" size={45} />
+                        <AntDesign name="stepforward" size={45} />
+                    </Animated.View>
+                    <Animated.View style={[playStyle]}>
+                        <AntDesign name="caretright" size={30} />
+                    </Animated.View>
+                </View>
             </BottomSheet>
         </View>
     );
@@ -131,5 +241,48 @@ const styles = StyleSheet.create({
         padding: 24,
         justifyContent: "center",
         backgroundColor: "grey",
+    },
+    image: {
+        width: width * 0.6,
+        height: width * 0.6,
+        position: "absolute",
+        borderRadius: 15,
+    },
+    contentContainer: {
+        position: "relative",
+    },
+    progressBar: {
+        height: 4,
+        width: width * 0.8,
+        backgroundColor: "rgba(0,0,0,0.6)",
+        borderRadius: 2,
+    },
+    progressContainer: {
+        left: width * 0.1,
+        top: width * 0.9,
+        position:"absolute",
+    },
+    cursor: {
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        backgroundColor: "rgba(0,0,0,0.9)",
+        transform: [{ translateY: -12 }, { translateX: 50 }],
+    },
+    beforeAfter: {
+        left: width * 0.1,
+        top: width * 1,
+        width: width * 0.8,
+        display: "flex",
+        alignItems: "center",
+        position: "absolute",
+        justifyContent: "space-between",
+        flexDirection: "row",
+    },
+    play: {
+        left: width * 0.5 - 22.5,
+        top: width * 1,
+        width: width * 0.8,
+        position: "absolute",
     },
 });
