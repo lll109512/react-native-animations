@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef,useState, useMemo, useCallback } from "react";
 import { StyleSheet, Text, View,Dimensions, FlatList } from 'react-native'
 import BottomSheet, {
     BottomSheetBackdrop,
@@ -17,7 +17,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const AnimatedFastImage = Animated.createAnimatedComponent(FastImage);
 const PADDING = 24
 
-const CustomBackground = ({ style, animatedIndex }) => {
+const CustomBackground = ({ style, animatedIndex, }) => {
     //#region styles
     const containerAnimatedStyle = useAnimatedStyle(() => {
         console.log(animatedIndex.value)
@@ -36,39 +36,53 @@ const CustomBackground = ({ style, animatedIndex }) => {
     return <Animated.View pointerEvents="none" style={containerStyle} />;
 };
 
+const ImageItem = (props)=>{
+    const { item, index, animatedIndex, selectedIndex } = props;
+    const style = useAnimatedStyle(()=>{
+        const opacity = interpolate(animatedIndex.value,[1,0.9],[1,0]);
+        return {
+            opacity:selectedIndex!==index ?opacity:1
+        }
+    })
+    return (
+        <Animated.View
+            style={[
+                {
+                    width: width * 0.6,
+                    height: width * 0.6,
+                    marginHorizontal: PADDING,
+                },
+                style,
+            ]}
+        >
+            <AnimatedFastImage
+                source={{ uri: item.image }}
+                style={[styles.image, StyleSheet.absoluteFillObject]}
+            />
+        </Animated.View>
+    );
+}
+
 const index = (props) => {
     // ref
     const bottomSheetRef = useRef(null)
     const animatedIndex = useSharedValue(0)
 
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [scrollEnabled, setScrollEnabled] = useState(false)
+    console.log(selectedIndex);
     // variables
     const snapPoints = useMemo(() => ["14%", "60%"], []);
 
     // callbacks
     const handleSheetChanges = useCallback((index) => {
         console.log("handleSheetChanges", index);
+        if(index===1){
+            setScrollEnabled(true)
+        }else{
+            setScrollEnabled(false);
+        }
     }, []);
-
-    const circleStyle = useAnimatedStyle(()=>{
-        return {
-            transform: [{ scale: 1 + animatedIndex.value }],
-        };
-    })
-    const data = useMemo(
-        () =>
-            Array(100)
-                .fill(0)
-                .map((_, index) => `index-${index}`),
-        []
-    );
-    const renderItem = useCallback(
-        ({ item }) => (
-            <View style={styles.itemContainer}>
-                <Text>{item}</Text>
-            </View>
-        ),
-        []
-    );
 
     const imageStyle = useAnimatedStyle(()=>{
         const scale = interpolate(animatedIndex.value, [1, 0], [1, 0.25], Extrapolate.CLAMP);
@@ -133,7 +147,6 @@ const index = (props) => {
             opacity,
         };
     });
-
     return (
         <View
             style={{
@@ -156,8 +169,16 @@ const index = (props) => {
                         <AnimatedFlatList
                             keyExtractor={item => `${item.key}`}
                             data={images}
+                            scrollEnabled={scrollEnabled}
                             horizontal
                             bounces={false}
+                            onMomentumScrollEnd={e => {
+                                setSelectedIndex(
+                                    Math.floor(
+                                        e.nativeEvent.contentOffset.x / (width * 0.6 + PADDING * 2)
+                                    )
+                                );
+                            }}
                             // pagingEnabled
                             decelerationRate="fast"
                             snapToInterval={width * 0.6 + PADDING * 2}
@@ -167,18 +188,12 @@ const index = (props) => {
                                 // backgroundColor:'red'
                             }}
                             renderItem={({ item, index }) => (
-                                <View
-                                    style={{
-                                        width: width * 0.6,
-                                        height: width * 0.6,
-                                        marginHorizontal: PADDING,
-                                    }}
-                                >
-                                    <AnimatedFastImage
-                                        source={{ uri: item.image }}
-                                        style={[styles.image, StyleSheet.absoluteFillObject]}
-                                    />
-                                </View>
+                                <ImageItem
+                                    item={item}
+                                    index={index}
+                                    animatedIndex={animatedIndex}
+                                    selectedIndex={selectedIndex}
+                                />
                             )}
                         />
                     </Animated.View>
