@@ -13,6 +13,7 @@ import RotaryLogin from 'src/screens/RotartLogin/index'
 import BottomTabNavigator1 from 'src/screens/BottomTabNavigator1' 
 import ScrollViewAnimatedHeader from 'src/screens/FlatList/AnimatedHeader/ScrollView' 
 import ScrollViewAnimatedHeaderTwo from 'src/screens/FlatList/AnimatedHeader/ScrollViewTwo' 
+import DragToSort from 'src/screens/DragToSort/index.js' 
 import Home from 'src/screens/Home' 
 const Drawer = createDrawerNavigator();
 
@@ -33,6 +34,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="ScrollViewAnimatedHeader" component={ScrollViewAnimatedHeader} options={{headerShown:false,title:"Animated header"}}/>
             <Drawer.Screen name="ScrollViewAnimatedHeaderTwo" component={ScrollViewAnimatedHeaderTwo} options={{headerShown:false,title:"Animated header two"}}/>
             <Drawer.Screen name="BottomsheetPlayground" component={Playground} options={{headerShown:false,title:"Bottom sheet play ground"}}/>
+            <Drawer.Screen name="Drag to sort" component={DragToSort} options={{headerShown:false,title:"Drag to sort list"}}/>
         </Drawer.Navigator>
     )
 }
