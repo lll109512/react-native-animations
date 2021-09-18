@@ -1,4 +1,4 @@
-import { isFunction, flatten, pick,isNil } from "lodash"
+import { isFunction, flatten, pick,isNil, isEmpty } from "lodash"
 import { useFormik } from "formik"
 import { formContext } from "./ContextProvider";
 import { useContext } from "react";
@@ -24,15 +24,15 @@ export const useForm = ({ fields, i18n, defaultValues, onSubmit }) => {
     const formik = useFormik({
         initialValues: {
             ...filterField.reduce((prev, curr) => {
-                const initValue = formComponents[curr]?.default || null
+                const initValue = formComponents[curr]?.default || null;
                 return { ...prev, [curr.name]: initValue };
             }, {}),
-            validationSchema: validationSchema,
             ...pick(
                 defaultValues,
                 filterField.map(o => o.name)
             ),
         },
+        validationSchema: validationSchema,
         onSubmit: async values => {
             const formik = { values };
             // only return input unhidden value
@@ -54,6 +54,7 @@ export const useForm = ({ fields, i18n, defaultValues, onSubmit }) => {
         formik,
         handleSubmit: formik.handleSubmit,
         formGenerator: () => factory.buildForm({ fields, formik, i18n }),
+        disabledSubmit: !formik.isValid||isEmpty(formik.touched)
     };
 };
 

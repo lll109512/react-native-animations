@@ -14,15 +14,15 @@ import * as yup from "yup";
 export const otherIndividualForm = i18n => {
     return [
         {
-            type: "text",
+            type: "textInput",
             name: "name",
             yup: yup
                 .string(i18n("Enter name"))
                 .max(128, i18n("Name should be of maximum 128 characters length"))
-                .required(i18n("Name is required")),
+                .required(i18n("Name is required"))
         },
         {
-            type: "text",
+            type: "textInput",
             name: "enName",
             yup: yup
                 .string(i18n("Enter english name"))
@@ -30,11 +30,11 @@ export const otherIndividualForm = i18n => {
                 .required(i18n("English name is required")),
         },
         {
-            type: "text",
+            type: "textInput",
             name: "idNo",
             yup: yup
                 .string(i18n("Enter Id card number"))
-                //.length(18, i18n("Id card number must be 18 characters length"))
+                .length(18, i18n("Id card number must be 18 characters length"))
                 .required(i18n("Id card number is required")),
         },
         {
@@ -45,7 +45,7 @@ export const otherIndividualForm = i18n => {
                 .required(i18n("Id card exprie date is required")),
         },
         {
-            type: "text",
+            type: "textInput",
             name: "postCode",
             yup: yup
                 .string(i18n("Enter postcode"))
@@ -53,7 +53,7 @@ export const otherIndividualForm = i18n => {
                 .required(i18n("Postcode is required")),
         },
         {
-            type: "text",
+            type: "textInput",
             name: "address",
             yup: yup
                 .string(i18n("Enter address"))

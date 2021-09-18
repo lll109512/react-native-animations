@@ -28,7 +28,7 @@ export default class FormFactory {
         this.viewComponents = {
             ...viewComponents,
             'undefined':{
-                components:UndefinedForm,
+                component:UndefinedForm,
                 default:""
             }
         };
@@ -45,10 +45,10 @@ export default class FormFactory {
         if(Array.isArray(field)){
             return oneLine(field, formik, i18n);
         }else{
-            if (hide && hide(formik)){
-                return null
+            if (field?.hide && hide(formik)) {
+                return null;
             }
-            const {component:Component} = get(this.formComponents,field.type,this.viewComponents['undefined'])
+            const { component: Component } = this.formComponents[field.type]||this.viewComponents["undefined"]
             return <Component {...field} formik={formik} i18n={i18n} index={index} {...other}/>
         }
     }
@@ -58,12 +58,12 @@ export default class FormFactory {
         const formatedTitle = trimStar
             ? trimEnd(trimEnd(displayTitle, "*"))
             : displayTitle;
-        const {component:Component} = get(this.viewComponents,field.type,this.viewComponents['undefined'])
+        const { component: Component } = this.formComponents[field.type]||this.viewComponents["undefined"]
         return <Component {...field} formik={formik} i18n={i18n} index={index} formatedTitle={formatedTitle} {...other}/>
     }
     
     buildForm({fields, formik, i18n}) {
-        return fields.map((field, index) => formikFormMapper({field,formik,i18n,index}));
+        return fields.map((field, index) => this.formikFormMapper({field,formik,i18n,index}));
     }
 
     buildViewer({i18n,data,fields,keepFormat=false,trimStar=false}) {
@@ -72,6 +72,6 @@ export default class FormFactory {
             : flatten(fields).filter(field => !this.viewLayoutComponents.includes(field.type));
         return filterField
                 .filter(({ name }) => (keepFormat ? true : (!isNil(data[name]) && data[name]!=='')))
-                .map((field, index) => formikViewMapper({field,formik,i18n,trimStar,index}));
+                .map((field, index) => this.formikViewMapper({field,formik,i18n,trimStar,index}));
     }
 }

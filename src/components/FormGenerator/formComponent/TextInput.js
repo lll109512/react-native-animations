@@ -1,4 +1,4 @@
-import { ErrorMessage } from 'formik';
+import { isFunction } from 'lodash';
 import React from 'react'
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
@@ -18,38 +18,41 @@ const Input = (props) => {
                 style={{
                     display: "flex",
                     alignItems: "center",
+                    flexDirection: "row",
                 }}
             >
-                {!renderTitle &&
-                <Text numberOfLines={1} style={{ width: 50, marginRight: 8 }}>
-                    {renderLabel || i18n(name)}
-                </Text>
-                }
+                {!renderTitle && (
+                    <Text numberOfLines={1} style={{ width: 100, marginRight: 8 }}>
+                        {renderLabel || i18n(name)}
+                    </Text>
+                )}
                 <TextInput
                     testID={`${name}Input`}
                     key={name}
-                    value={formik.vlaues[name]}
+                    value={formik.values[name]}
                     onChangeText={value => formik.setFieldValue(name, value)}
                     onBlur={async () => {
                         if (serverValidator) {
                             const { valid, message } = await serverValidator(formik.values[name]);
                             if (!valid) {
-                                formik.errors[name] = message;
+                                formik.setFieldError(name, message);
                             } else {
-                                formik.errors[name] = null;
+                                formik.setFieldError(name, null);
                             }
                         } else {
+                            console.log("onBlure");
                             formik.setFieldTouched(name);
                         }
                     }}
+                    placeholder="Text here"
                     {...inputProps}
                 />
             </View>
-            <ErrorMessage name={name}>
-                {error => <Text style={{ color: "red" }}>{error}</Text>}
-            </ErrorMessage>
+            {Boolean(formik.errors[name]) && Boolean(formik.touched[name])  && (
+                <Text style={{ color: "red" }}>{formik.errors[name]}</Text>
+            )}
         </View>
-    );
+    );123
 }
 
 export default Input;
