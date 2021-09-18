@@ -30,7 +30,7 @@ const Input = (props) => {
                     key={name}
                     value={formik.vlaues[name]}
                     onChangeText={value => formik.setFieldValue(name, value)}
-                    onBlur={() => {
+                    onBlur={async () => {
                         if (serverValidator) {
                             const { valid, message } = await serverValidator(formik.values[name]);
                             if (!valid) {

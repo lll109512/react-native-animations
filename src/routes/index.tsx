@@ -15,6 +15,7 @@ import ScrollViewAnimatedHeader from 'src/screens/FlatList/AnimatedHeader/Scroll
 import ScrollViewAnimatedHeaderTwo from 'src/screens/FlatList/AnimatedHeader/ScrollViewTwo' 
 import DragToSort from 'src/screens/DragToSort/index.js' 
 import Home from 'src/screens/Home' 
+import Form from 'src/screens/Forms/index'
 const Drawer = createDrawerNavigator();
 
 
@@ -35,6 +36,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="ScrollViewAnimatedHeaderTwo" component={ScrollViewAnimatedHeaderTwo} options={{headerShown:false,title:"Animated header two"}}/>
             <Drawer.Screen name="BottomsheetPlayground" component={Playground} options={{headerShown:false,title:"Bottom sheet play ground"}}/>
             <Drawer.Screen name="Drag to sort" component={DragToSort} options={{headerShown:false,title:"Drag to sort list"}}/>
+            <Drawer.Screen name="Form test 1" component={Form} options={{headerShown:true,title:"Form test 1"}}/>
         </Drawer.Navigator>
     )
 }

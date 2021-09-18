@@ -10,7 +10,7 @@ const oneLine = (components, formik, i18n) => {
         }}>
             {components.map((item, index) => (
                 <View key={index} style={{
-                    marginLeft=index !== 0 ? 1 : 0,
+                    marginLeft:index !== 0 ? 1 : 0,
                     flex:1
                 }}>
                     {formikMapper(item, formik, i18n)}
@@ -27,11 +27,17 @@ export default class FormFactory {
     constructor(viewComponents={}, formComponents={},viewLayoutComponents=["divider", "title"]) {
         this.viewComponents = {
             ...viewComponents,
-            'undefined':UndefinedForm
+            'undefined':{
+                components:UndefinedForm,
+                default:""
+            }
         };
         this.formComponents = {
             ...formComponents,
-            'undefined':UndefinedView
+            'undefined':{
+                component:UndefinedView,
+                default:""
+            }
         };
         this.viewLayoutComponents = viewLayoutComponents
     }
@@ -42,25 +48,25 @@ export default class FormFactory {
             if (hide && hide(formik)){
                 return null
             }
-            const MatchedComponent = get(this.formComponents,field.type,this.viewComponents['undefined'])
-            return <MatchedComponent {...field} formik={formik} i18n={i18n} index={index} {...other}/>
+            const {component:Component} = get(this.formComponents,field.type,this.viewComponents['undefined'])
+            return <Component {...field} formik={formik} i18n={i18n} index={index} {...other}/>
         }
     }
     formikViewMapper({field,formik,i18n,index,...other}){
-        // const { label, title, type } = field
-        // const displayTitle = title || (label && isFunction(label)? label(data):label) || i18n(name);
-        // const formatTitle = trimStar
-        //     ? trimEnd(trimEnd(displayTitle, "*"))
-        //     : displayTitle;
-        const MatchedComponent = get(this.viewComponents,field.type,this.viewComponents['undefined'])
-        return <MatchedComponent {...field} formik={formik} i18n={i18n} index={index} {...other}/>
+        const { label, title, type } = field
+        const displayTitle = title || (label && isFunction(label)? label(data):label) || i18n(name);
+        const formatedTitle = trimStar
+            ? trimEnd(trimEnd(displayTitle, "*"))
+            : displayTitle;
+        const {component:Component} = get(this.viewComponents,field.type,this.viewComponents['undefined'])
+        return <Component {...field} formik={formik} i18n={i18n} index={index} formatedTitle={formatedTitle} {...other}/>
     }
     
-    buildFormGenerator({fields, formik, i18n}) {
+    buildForm({fields, formik, i18n}) {
         return fields.map((field, index) => formikFormMapper({field,formik,i18n,index}));
     }
 
-    buildViewerGenerator({i18n,data,fields,keepFormat=false,trimStar=false}) {
+    buildViewer({i18n,data,fields,keepFormat=false,trimStar=false}) {
         const filterField = keepFormat
             ? flatten(fields)
             : flatten(fields).filter(field => !this.viewLayoutComponents.includes(field.type));

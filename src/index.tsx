@@ -4,13 +4,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native'
 import Routes from './routes'
 import 'react-native-gesture-handler';
+import { FormProvider } from 'src/components/FormGenerator/ContextProvider';
+import {formComponents,viewComponents} from 'src/components/FormGenerator/FormGeno';
 
 
 const index= () => {
     return (
-        <NavigationContainer>
-            <Routes/>
-        </NavigationContainer>
+        <FormProvider formComponents={formComponents} viewComponents={viewComponents}>
+            <NavigationContainer>
+                <Routes/>
+            </NavigationContainer>
+        </FormProvider>
     )
 }
 
