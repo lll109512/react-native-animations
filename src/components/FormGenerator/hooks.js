@@ -1,8 +1,8 @@
 import { isFunction, flatten, pick,isNil } from "lodash"
 import { useFormik } from "formik"
 import { formContext } from "./ContextProvider";
-import yup from 'yup'
 import { useContext } from "react";
+import * as yup from "yup";
 
 export const useForm = ({ fields, i18n, defaultValues, onSubmit }) => {
     if(isNil(fields)){
