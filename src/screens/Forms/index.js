@@ -5,7 +5,7 @@ import { otherIndividualForm } from "src/data/forms";
 
 const index = () => {
     const [savedData, setSavedData] = useState(null)
-    const { formik, handleSubmit, formGenerator, disabledSubmit } = useForm({
+    const { formik, handleSubmit, formGenerator, submitDisabled } = useForm({
         fields: otherIndividualForm(v => v),
         i18n: v => v,
         onSubmit: values => {
@@ -26,7 +26,7 @@ const index = () => {
                     {item}
                 </View>
             ))}
-            <Button onPress={() => handleSubmit()} disabled={disabledSubmit} title="subumit" />
+            <Button onPress={() => handleSubmit()} disabled={submitDisabled} title="subumit" />
             {viewGenerator().map((item, index) => (
                 <View key={index} style={{ marginVertical: 8 }}>
                     {item}

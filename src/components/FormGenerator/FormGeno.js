@@ -5,19 +5,19 @@ import TextViewer from './viewerComponent/TextViewer';
 export const viewComponents = {
     textInput:{
         component:TextViewer,
-        placeholderValue: "No data",
+        placeholderValue: "",
     },
     phoneInput:{
         component:TextViewer,
-        placeholderValue: "No data",
+        placeholderValue: "",
     },
     numberInput:{
         component:TextViewer,
-        placeholderValue: "No data",
+        placeholderValue: "",
     },
     emailInput:{
         component:TextViewer,
-        placeholderValue: "No data"
+        placeholderValue: ""
     },
 };
 

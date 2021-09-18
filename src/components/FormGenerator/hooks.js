@@ -54,7 +54,7 @@ export const useForm = ({ fields, i18n, defaultValues, onSubmit }) => {
         formik,
         handleSubmit: formik.handleSubmit,
         formGenerator: () => factory.buildForm({ fields, formik, i18n }),
-        disabledSubmit: !formik.isValid||isEmpty(formik.touched)
+        submitDisabled: !formik.isValid||isEmpty(formik.touched)
     };
 };
 
