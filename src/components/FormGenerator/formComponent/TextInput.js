@@ -52,7 +52,7 @@ const Input = (props) => {
                 <Text style={{ color: "red" }}>{formik.errors[name]}</Text>
             )}
         </View>
-    );123
+    );
 }
 
 export default Input;
