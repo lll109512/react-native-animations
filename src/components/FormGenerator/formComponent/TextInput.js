@@ -31,24 +31,12 @@ const Input = (props) => {
                     key={name}
                     value={formik.values[name]}
                     onChangeText={value => formik.setFieldValue(name, value)}
-                    onBlur={async () => {
-                        if (serverValidator) {
-                            const { valid, message } = await serverValidator(formik.values[name]);
-                            if (!valid) {
-                                formik.setFieldError(name, message);
-                            } else {
-                                formik.setFieldError(name, null);
-                            }
-                        } else {
-                            console.log("onBlure");
-                            formik.setFieldTouched(name);
-                        }
-                    }}
+                    onBlur={() => formik.setFieldTouched(name)}
                     placeholder="Text here"
                     {...inputProps}
                 />
             </View>
-            {Boolean(formik.errors[name]) && Boolean(formik.touched[name])  && (
+            {Boolean(formik.errors[name]) && Boolean(formik.touched[name]) && (
                 <Text style={{ color: "red" }}>{formik.errors[name]}</Text>
             )}
         </View>

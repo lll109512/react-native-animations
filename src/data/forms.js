@@ -15,50 +15,58 @@ export const otherIndividualForm = i18n => {
     return [
         {
             type: "textInput",
-            name: "name",
+            name: "name*",
             yup: yup
                 .string(i18n("Enter name"))
                 .max(128, i18n("Name should be of maximum 128 characters length"))
-                .required(i18n("Name is required"))
+                .required(i18n("Name is required")),
         },
         {
             type: "textInput",
-            name: "enName",
+            name: "enName*",
             yup: yup
                 .string(i18n("Enter english name"))
                 .max(128, i18n("English name should be of maximum 128 characters length"))
-                .required(i18n("English name is required")),
+                // .test('serverSideTest','UserExisted',async (value)=>{
+                //     await new Promise((res, rej) => {
+                //         setTimeout(() => {
+                //             res();
+                //         }, 1000);
+                //     });
+                //     return value==='123'?false:true
+                // })
+                .required(i18n("English name is required"))
         },
-        {
-            type: "textInput",
-            name: "idNo",
-            yup: yup
-                .string(i18n("Enter Id card number"))
-                .length(18, i18n("Id card number must be 18 characters length"))
-                .required(i18n("Id card number is required")),
-        },
-        {
-            type: "date",
-            name: "legalCertExpiryDate",
-            yup: yup
-                .date(i18n("Enter your Id card expire date"))
-                .required(i18n("Id card exprie date is required")),
-        },
-        {
-            type: "textInput",
-            name: "postCode",
-            yup: yup
-                .string(i18n("Enter postcode"))
-                .max(8, i18n("Postcode should be of maximum 8 characters length"))
-                .required(i18n("Postcode is required")),
-        },
-        {
-            type: "textInput",
-            name: "address",
-            yup: yup
-                .string(i18n("Enter address"))
-                .max(256, i18n("Address should be of maximum 256 characterslength"))
-                .required(i18n("Address is required")),
-        },
+        // {
+        //     type: "textInput",
+        //     name: "idNo",
+        //     yup: yup
+        //         .string(i18n("Enter Id card number"))
+        //         .length(18, i18n("Id card number must be 18 characters length"))
+        //         .required(i18n("Id card number is required")),
+        // },
+        // {
+        //     type: "date",
+        //     name: "legalCertExpiryDate",
+        //     yup: yup
+        //         .date(i18n("Enter your Id card expire date"))
+        //         .required(i18n("Id card exprie date is required")),
+        // },
+        // {
+        //     type: "textInput",
+        //     name: "postCode",
+        //     yup: yup
+        //         .string(i18n("Enter postcode"))
+        //         .max(8, i18n("Postcode should be of maximum 8 characters length"))
+        //         .required(i18n("Postcode is required")),
+        // },
+        // {
+        //     type: "textInput",
+        //     name: "address",
+        //     yup: yup
+        //         .string(i18n("Enter address"))
+        //         .max(256, i18n("Address should be of maximum 256 characterslength"))
+        //         .required(i18n("Address is required")),
+        // },
     ];
 };

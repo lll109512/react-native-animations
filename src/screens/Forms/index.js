@@ -1,24 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
-import { useForm } from 'src/components/FormGenerator/hooks'
+import { useForm, useFormView } from 'src/components/FormGenerator/hooks'
 import { otherIndividualForm } from "src/data/forms";
 
 const index = () => {
+    const [savedData, setSavedData] = useState(null)
     const { formik, handleSubmit, formGenerator, disabledSubmit } = useForm({
         fields: otherIndividualForm(v => v),
         i18n: v => v,
-        onSubmit: values => console.log(values),
+        onSubmit: values => {
+            console.log(values)
+            setSavedData(values)
+        },
+    });
+    const { viewGenerator } = useFormView({
+        fields: otherIndividualForm(v => v),
+        data: savedData,
+        i18n: v => v,
+        trimStar:true
     });
     return (
         <View style={{ paddingHorizontal: 8 }}>
-            {formGenerator().map((item,index) => (
-                <View key={index} style={{ marginVertical: 8 }}>{item}</View>
+            {formGenerator().map((item, index) => (
+                <View key={index} style={{ marginVertical: 8 }}>
+                    {item}
+                </View>
             ))}
-            <Button
-                onPress={() => handleSubmit()}
-                disabled={disabledSubmit}
-                title="subumit"
-            ></Button>
+            <Button onPress={() => handleSubmit()} disabled={disabledSubmit} title="subumit" />
+            {viewGenerator().map((item, index) => (
+                <View key={index} style={{ marginVertical: 8 }}>
+                    {item}
+                </View>
+            ))}
         </View>
     );
 }

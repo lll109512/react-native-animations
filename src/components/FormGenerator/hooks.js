@@ -24,7 +24,7 @@ export const useForm = ({ fields, i18n, defaultValues, onSubmit }) => {
     const formik = useFormik({
         initialValues: {
             ...filterField.reduce((prev, curr) => {
-                const initValue = formComponents[curr]?.default || null;
+                const initValue = formComponents[curr]?.defaultValue || null;
                 return { ...prev, [curr.name]: initValue };
             }, {}),
             ...pick(
@@ -59,14 +59,14 @@ export const useForm = ({ fields, i18n, defaultValues, onSubmit }) => {
 };
 
 export const useFormView = ({fields,i18n,data,keepFormat,trimStar})=>{
-    if(isNil(fields)){
+    if (isNil(fields) || isNil(data)) {
         return {
-             viewGenerator: () => null
-        }
+            viewGenerator: () => [],
+        };
     }
     const { factory } = useContext(formContext);
     return {
         viewGenerator: () =>
-            factory.buildViewer({ fields, i18n, keepFormat, trimStar, data }),
+            factory.buildView({ fields, i18n, keepFormat, trimStar, data }),
     };
 }

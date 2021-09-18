@@ -1,24 +1,41 @@
 import TextInput from './formComponent/TextInput'
 import {NumberInput,PhoneInput,EmailInput} from './formComponent/PresetInputs'
+import TextViewer from './viewerComponent/TextViewer';
 
 export const viewComponents = {
+    textInput:{
+        component:TextViewer,
+        placeholderValue: "No data",
+    },
+    phoneInput:{
+        component:TextViewer,
+        placeholderValue: "No data",
+    },
+    numberInput:{
+        component:TextViewer,
+        placeholderValue: "No data",
+    },
+    emailInput:{
+        component:TextViewer,
+        placeholderValue: "No data"
+    },
 };
 
 export const formComponents = {
     textInput: {
         component: TextInput,
-        default: "",
+        defaultValue: "",
     },
     phoneInput: {
         component: PhoneInput,
-        default: "",
+        defaultValue: "",
     },
     numberInput: {
         component: NumberInput,
-        default: "",
+        defaultValue: "",
     },
     emailInput: {
         component: EmailInput,
-        default: ""
+        defaultValue: ""
     },
 };

@@ -1,6 +1,6 @@
 import React from 'react'
 import { flatten, get, isFunction, isNil, trimEnd } from "lodash";
-import { View,Text } from "react-native";
+import { View, Text } from "react-native";
 
 const oneLine = (components, formik, i18n) => {
     return (
@@ -24,54 +24,78 @@ const UndefinedView = (props)=><View><Text style={{textAlign: "center"}}>Undefin
 const UndefinedForm = (props)=><View><Text style={{textAlign: "center"}}>Undefined forms of type:{props.type}</Text></View>
 
 export default class FormFactory {
-    constructor(viewComponents={}, formComponents={},viewLayoutComponents=["divider", "title"]) {
+    constructor(
+        viewComponents = {},
+        formComponents = {},
+        viewLayoutComponents = ["divider", "title"]
+    ) {
         this.viewComponents = {
             ...viewComponents,
-            'undefined':{
-                component:UndefinedForm,
-                default:""
-            }
+            undefined: {
+                component: UndefinedForm,
+                placeholderValue: "",
+            },
         };
         this.formComponents = {
             ...formComponents,
-            'undefined':{
-                component:UndefinedView,
-                default:""
-            }
+            undefined: {
+                component: UndefinedView,
+                defaultValue: "",
+            },
         };
-        this.viewLayoutComponents = viewLayoutComponents
+        this.viewLayoutComponents = viewLayoutComponents;
     }
-    formikFormMapper({field,formik,i18n,index,...other}){
-        if(Array.isArray(field)){
+    formikFormMapper({ field, formik, i18n, index, ...other }) {
+        if (Array.isArray(field)) {
             return oneLine(field, formik, i18n);
-        }else{
+        } else {
             if (field?.hide && hide(formik)) {
                 return null;
             }
-            const { component: Component } = this.formComponents[field.type]||this.viewComponents["undefined"]
-            return <Component {...field} formik={formik} i18n={i18n} index={index} {...other}/>
+            const { component: Component, ...otherProps } =
+                this.formComponents[field.type] || this.viewComponents["undefined"];
+            return (
+                <Component
+                    formik={formik}
+                    i18n={i18n}
+                    index={index}
+                    {...other}
+                    {...otherProps}
+                    {...field}
+                />
+            );
         }
     }
-    formikViewMapper({field,formik,i18n,index,...other}){
-        const { label, title, type } = field
-        const displayTitle = title || (label && isFunction(label)? label(data):label) || i18n(name);
-        const formatedTitle = trimStar
-            ? trimEnd(trimEnd(displayTitle, "*"))
-            : displayTitle;
-        const { component: Component } = this.formComponents[field.type]||this.viewComponents["undefined"]
-        return <Component {...field} formik={formik} i18n={i18n} index={index} formatedTitle={formatedTitle} {...other}/>
-    }
-    
-    buildForm({fields, formik, i18n}) {
-        return fields.map((field, index) => this.formikFormMapper({field,formik,i18n,index}));
+    formikViewMapper({ field, i18n, index, data, trimStar, ...other }) {
+        const { label, title, name } = field;
+        const displayTitle =
+            title || (label && isFunction(label) ? label(data) : label) || i18n(name);
+        const formatedTitle = trimStar ? trimEnd(trimEnd(displayTitle, "*")) : displayTitle;
+        const { component: Component, ...otherProps } =
+            this.viewComponents[field.type] || this.viewComponents["undefined"];
+        return (
+            <Component
+                i18n={i18n}
+                index={index}
+                formatedTitle={formatedTitle}
+                data={data}
+                {...other}
+                {...otherProps}
+                {...field}
+            />
+        );
     }
 
-    buildViewer({i18n,data,fields,keepFormat=false,trimStar=false}) {
+    buildForm({ fields, formik, i18n }) {
+        return fields.map((field, index) => this.formikFormMapper({ field, formik, i18n, index }));
+    }
+
+    buildView({ i18n, data, fields, keepFormat = false, trimStar = false }) {
         const filterField = keepFormat
             ? flatten(fields)
             : flatten(fields).filter(field => !this.viewLayoutComponents.includes(field.type));
         return filterField
-                .filter(({ name }) => (keepFormat ? true : (!isNil(data[name]) && data[name]!=='')))
-                .map((field, index) => this.formikViewMapper({field,formik,i18n,trimStar,index}));
+            .filter(({ name }) => (keepFormat ? true : !isNil(data[name]) && data[name] !== ""))
+            .map((field, index) => this.formikViewMapper({ field, i18n, trimStar, index, data }));
     }
 }
