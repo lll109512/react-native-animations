@@ -14,6 +14,8 @@ import BottomTabNavigator1 from 'src/screens/BottomTabNavigator1'
 import ScrollViewAnimatedHeader from 'src/screens/FlatList/AnimatedHeader/ScrollView' 
 import ScrollViewAnimatedHeaderTwo from 'src/screens/FlatList/AnimatedHeader/ScrollViewTwo' 
 import DragToSort from 'src/screens/DragToSort/index.js' 
+import SwipToDelete from 'src/screens/SwiperToDeleteList/index.js' 
+import SwipToDeleteFlatList from 'src/screens/SwiperToDeleteList/FlatList.js' 
 import Home from 'src/screens/Home' 
 import Form from 'src/screens/Forms/index'
 const Drawer = createDrawerNavigator();
@@ -37,6 +39,8 @@ const Index: React.FC = () => {
             <Drawer.Screen name="BottomsheetPlayground" component={Playground} options={{headerShown:false,title:"Bottom sheet play ground"}}/>
             <Drawer.Screen name="Drag to sort" component={DragToSort} options={{headerShown:false,title:"Drag to sort list"}}/>
             <Drawer.Screen name="Form test 1" component={Form} options={{headerShown:true,title:"Form test 1"}}/>
+            <Drawer.Screen name="SwipToDelete" component={SwipToDelete} options={{headerShown:true,title:"swip to delete"}}/>
+            <Drawer.Screen name="SwipToDeleteFlatList" component={SwipToDeleteFlatList} options={{headerShown:true,title:"swip to delete (FlatList)"}}/>
         </Drawer.Navigator>
     )
 }
