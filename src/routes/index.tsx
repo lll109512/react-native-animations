@@ -17,6 +17,8 @@ import DragToSort from 'src/screens/DragToSort/index.js'
 import SwipToDelete from 'src/screens/SwiperToDeleteList/index.js' 
 import SwipToDeleteFlatList from 'src/screens/SwiperToDeleteList/FlatList.js' 
 import hiddenActions from 'src/screens/ScrollHiddenActions/index.js' 
+import Loader from 'src/screens/Loader/index.js' 
+import Switch from 'src/screens/Switch/index.js' 
 import Home from 'src/screens/Home' 
 import Form from 'src/screens/Forms/index'
 const Drawer = createDrawerNavigator();
@@ -43,6 +45,8 @@ const Index: React.FC = () => {
             <Drawer.Screen name="SwipToDelete" component={SwipToDelete} options={{headerShown:true,title:"swip to delete"}}/>
             <Drawer.Screen name="SwipToDeleteFlatList" component={SwipToDeleteFlatList} options={{headerShown:true,title:"swip to delete (FlatList)"}}/>
             <Drawer.Screen name="hiddenActions" component={hiddenActions} options={{headerShown:false,title:"Hidden actions"}}/>
+            <Drawer.Screen name="Switch" component={Switch} options={{headerShown:false,title:"Switch"}}/>
+            <Drawer.Screen name="Loader" component={Loader} options={{headerShown:false,title:"Loader"}}/>
         </Drawer.Navigator>
     )
 }
