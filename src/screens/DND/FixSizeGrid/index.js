@@ -88,7 +88,6 @@ const DNDContainer = (props)=>{
                 newPosition.x !== positionIndex.value[id].x ||
                 newPosition.y !== positionIndex.value[id].y
             ) {
-                // console.log(newPosition, positionIndex.value);
                 positionIndex.value = objectMove(
                     positionIndex.value,
                     positionIndex.value[id],
