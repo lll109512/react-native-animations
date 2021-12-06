@@ -20,9 +20,36 @@ const Item = (props)=>{
                 ),
         };
     })
+    const rTextStyle = useAnimatedStyle(()=>{
+        return {
+            bottom: interpolate(
+                y.value || 0,
+                [(index - 1) * MAX_IMAGE_HEIGHT, index * MAX_IMAGE_HEIGHT],
+                [24, 70],
+                Extrapolate.CLAMP
+            ),
+            transform: [
+                {
+                    scale: interpolate(
+                        y.value || 0,
+                        [(index - 1) * MAX_IMAGE_HEIGHT, index * MAX_IMAGE_HEIGHT],
+                        [1, 1.3],
+                        Extrapolate.CLAMP
+                    ),
+                },
+            ],
+        };
+    })
     return (
         <Animated.View style={[rStyle]}>
             <Image source={{ uri: image.image }} style={styles.image}></Image>
+            <Animated.View style={[{ position: "absolute", left: 0, right: 0 }, rTextStyle]}>
+                <Text
+                    style={{ fontSize: 24, color: "white", textAlign: "center", fontWeight: "600" }}
+                >
+                    {image.location}
+                </Text>
+            </Animated.View>
         </Animated.View>
     );
 }
@@ -31,7 +58,6 @@ const index = (props) => {
     const scrollY = useSharedValue()
     const handleScroll = useAnimatedScrollHandler(event => {
         scrollY.value = event.contentOffset.y;
-        console.log(event.contentOffset.y)
     });
     return (
         <View style={{ flex: 1 }}>
