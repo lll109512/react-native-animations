@@ -19,6 +19,8 @@ import SwipToDeleteFlatList from 'src/screens/SwiperToDeleteList/FlatList.js'
 import hiddenActions from 'src/screens/ScrollHiddenActions/index.js' 
 import Loader from 'src/screens/Loader/index.js' 
 import Switch from 'src/screens/Switch/index.js' 
+import FixSizeGrid from 'src/screens/DND/FixSizeGrid/index.js' 
+import StockGraph from 'src/screens/SVGAnimation/stockGraph/index.js' 
 import Home from 'src/screens/Home' 
 import Form from 'src/screens/Forms/index'
 const Drawer = createDrawerNavigator();
@@ -47,6 +49,8 @@ const Index: React.FC = () => {
             <Drawer.Screen name="hiddenActions" component={hiddenActions} options={{headerShown:false,title:"Hidden actions"}}/>
             <Drawer.Screen name="Switch" component={Switch} options={{headerShown:false,title:"Switch"}}/>
             <Drawer.Screen name="Loader" component={Loader} options={{headerShown:false,title:"Loader"}}/>
+            <Drawer.Screen name="FixSizeGrid" component={FixSizeGrid} options={{headerShown:false,title:"Fix size grid"}}/>
+            <Drawer.Screen name="StockGraph" component={StockGraph} options={{headerShown:false,title:"Stock graph"}}/>
         </Drawer.Navigator>
     )
 }
