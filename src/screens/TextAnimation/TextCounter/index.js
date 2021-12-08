@@ -14,6 +14,7 @@ const Digital = (props)=>{
             transform: [{ translateY: withSpring(offset, { stiffness:35}) }],
         };
     })
+
     return (
         <View>
             <View style={styles.mask}>
@@ -58,13 +59,13 @@ const Counter = (props)=>{
 }
 
 const index = (props) => {
-    const [number, setNumber] = useState(123456)
+    const [number, setNumber] = useState(999999)
     return (
         <View style={styles.root}>
             <Counter number={number} maxNumberCount={6}/>
             <View style={styles.btns}>
                 <Button title="add one" onPress={() => setNumber(c => c + 1)} />
-                <Button title="minus one" onPress={() => setNumber(c => c - 1)} />
+                <Button title="minus one" onPress={() => setNumber(c => Math.max(c - 1,0))} />
                 <Button title="random" onPress={() => setNumber(random(999999))} />
             </View>
         </View>
