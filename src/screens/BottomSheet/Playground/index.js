@@ -8,7 +8,7 @@ import BottomSheet, {
     BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Animated,{ Extrapolate, interpolate, interpolateColor, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated,{ Extrapolate, interpolate, interpolateColor, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import FastImage from "react-native-fast-image";
 import { images } from "src/data/data";
 const {width,height} = Dimensions.get('screen')
@@ -147,6 +147,7 @@ const index = (props) => {
             opacity,
         };
     });
+
     return (
         <View
             style={{
@@ -169,6 +170,7 @@ const index = (props) => {
                         <AnimatedFlatList
                             keyExtractor={item => `${item.key}`}
                             data={images}
+                            onScroll={onScroll}
                             scrollEnabled={scrollEnabled}
                             horizontal
                             bounces={false}

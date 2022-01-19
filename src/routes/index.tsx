@@ -23,6 +23,7 @@ import FixSizeGrid from 'src/screens/DND/FixSizeGrid/index.js'
 import StockGraph from 'src/screens/SVGAnimation/stockGraph/index.js' 
 import Chanel from 'src/screens/Chanel/index.js' 
 import TextCounter from 'src/screens/TextAnimation/TextCounter/index.js' 
+import Swiper from 'src/screens/SwiperList/index.js' 
 import Home from 'src/screens/Home' 
 import Form from 'src/screens/Forms/index'
 const Drawer = createDrawerNavigator();
@@ -55,6 +56,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="Chanel" component={Chanel} options={{headerShown:false,title:"Chanel Effect"}}/>
             <Drawer.Screen name="StockGraph" component={StockGraph} options={{headerShown:false,title:"Stock graph"}}/>
             <Drawer.Screen name="TextCounter" component={TextCounter} options={{headerShown:false,title:"Text counter"}}/>
+            <Drawer.Screen name="Swiper" component={Swiper} options={{headerShown:true,title:"Swiper"}}/>
         </Drawer.Navigator>
     )
 }
