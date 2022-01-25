@@ -28,6 +28,7 @@ export default () => {
     const isActived = useSharedValue(false)
     const translateX = useSharedValue(0)
     const translateY = useSharedValue(0)
+    console.log(candles);
     const onGestureHandler = useAnimatedGestureHandler({
         onStart() {
             isActived.value = true;
@@ -35,6 +36,7 @@ export default () => {
         onActive(event) {
             translateY.value = event.y;
             translateX.value = event.x;
+            console.log(translateY);
         },
         onFinish() {
             isActived.value = false;

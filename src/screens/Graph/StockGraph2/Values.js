@@ -37,21 +37,20 @@ const formatValue = (value) =>
 
 export default ({ candles,translateX,caliber }) => {
   const [{ date, open, close, high, low },setCandle] = useState(candles[0]);
-  console.log(open,close,high,low)
   const diff = `${((close - open) * 100) / open}`;
   const change = close - open < 0 ? diff.substring(0, 5) : diff.substring(0, 4);
   
   // useDerivedValue(()=>,[translateX])
-    useAnimatedReaction(
-        () => translateX.value,
-        (currentPosition, previousPosition) => {
-            // console.log(currentPosition);
-            runOnJS(setCandle)(
-                candles[Math.max(0, Math.min(Math.floor(currentPosition / caliber), candles.length-1))]
-            );
-        },
-        [translateX]
-    );
+    // useAnimatedReaction(
+    //     () => translateX.value,
+    //     (currentPosition, previousPosition) => {
+    //         // console.log(currentPosition);
+    //         runOnJS(setCandle)(
+    //             candles[Math.max(0, Math.min(Math.ceil(currentPosition / caliber), candles.length-1))]
+    //         );
+    //     },
+    //     [translateX]
+    // );
   return (
       <SafeAreaView style={styles.container}>
           <View style={styles.table}>
@@ -67,7 +66,7 @@ export default ({ candles,translateX,caliber }) => {
                   <Row
                       label="Change"
                       value={`${change}%`}
-                      color={close - open > 0 ?"#E33F64": "#4AFA9A"}
+                      color={close - open > 0 ? "#4AFA9A" : "#E33F64"}
                   />
               </View>
           </View>
