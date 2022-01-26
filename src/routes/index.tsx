@@ -26,6 +26,7 @@ import Swiper from 'src/screens/SwiperList/index.js'
 import StockGraph from 'src/screens/Graph/StockGraph/index.js' 
 import StockGraph2 from 'src/screens/Graph/StockGraph2/index.js' 
 import StockGraph3 from 'src/screens/Graph/StockGraph3/index.js' 
+import StockGraph4 from 'src/screens/Graph/StockGraph4/index.js' 
 import StockLineChip from 'src/screens/Graph/StockLineChip/index.js' 
 import Home from 'src/screens/Home' 
 import Form from 'src/screens/Forms/index'
@@ -60,6 +61,7 @@ const Index: React.FC = () => {
             <Drawer.Screen name="StockGraph" component={StockGraph} options={{headerShown:false,title:"Stock graph"}}/>
             <Drawer.Screen name="StockGraph2" component={StockGraph2} options={{headerShown:false,title:"Stock graph2"}}/>
             <Drawer.Screen name="StockGraph3" component={StockGraph3} options={{headerShown:false,title:"Stock graph3"}}/>
+            <Drawer.Screen name="StockGraph4" component={StockGraph4} options={{headerShown:false,title:"Stock graph4"}}/>
             <Drawer.Screen name="StockLineChip" component={StockLineChip} options={{headerShown:false,title:"Stock Line Chip"}}/>
             <Drawer.Screen name="TextCounter" component={TextCounter} options={{headerShown:false,title:"Text counter"}}/>
             <Drawer.Screen name="Swiper" component={Swiper} options={{headerShown:true,title:"Swiper"}}/>

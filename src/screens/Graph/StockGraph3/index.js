@@ -86,7 +86,7 @@ export default () => {
             <View style={{ height: 100 }}>{/* <Values {...{ caliber, candles }} /> */}</View>
             <View>
                 <Chart {...{ caliber, data, scrollOffset }} />
-                <PanGestureHandler minDist={2} onGestureEvent={onGestureHandler}>
+                <PanGestureHandler onGestureEvent={onGestureHandler}>
                     <Animated.View style={[StyleSheet.absoluteFill]}>
                         <PinchGestureHandler onGestureEvent={onPinchGestureHandler}>
                             <Animated.View style={[StyleSheet.absoluteFill]} />

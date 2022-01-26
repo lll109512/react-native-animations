@@ -16,7 +16,7 @@ const Chart = (props) => {
     // const scaleY = scaleLinear().domain(domain).range([size, 0]);
     // const scaleBody = scaleLinear().domain([0,domain[1]-domain[0]]).range([0,size])
     
-    const inputRange = useSharedValue([0,0])
+    const inputRange = useSharedValue([7505.65,8453.31])
     const startEndRange = useSharedValue([0,100])
     const maxMinArrage = useSharedValue({max:null,min:null})
     useDerivedValue(()=>{
@@ -24,34 +24,24 @@ const Chart = (props) => {
         const numberInViewCandles = Math.floor(width / caliber.value) + 4;
         const startIndex = Math.floor(Math.abs(scrollOffset.value) / caliber.value);
         const endIndex = startIndex + numberInViewCandles;
-        console.log(startIndex, endIndex);
+        // console.log(startIndex, endIndex);
         if(startEndRange.value[0]!==startIndex||startEndRange.value[1]!==endIndex){
             startEndRange.value = [startIndex,endIndex]
         }else{
             return //avoid calculation
         }
-        // if(maxMinArrage.value.max === null && maxMinArrage.value.min === null){
-            const inRangeValues = data
-                .slice(startIndex, endIndex)
-                .map(item => [item.low, item.high])
-                .flat();
-            maxMinArrage.value = {
-                max: Math.max(...inRangeValues),
-                min: Math.min(...inRangeValues),
-            };
-            const newInputRange = [maxMinArrage.value.min, maxMinArrage.value.max];
-        // }else{
-            // if (startIndex-oldStartEndRange[0] > 0) {
-            //     const removeItemsHighSortFirst = data.slice(oldStartEndRange[0], startIndex).map(item=>item.high).sort(i=>-i)
-            //     const addedItemsLowSortFirst = data.slice(oldStartEndRange[1], endIndex).map(item=>item.low).sort(i=>-Math.abs(i))
-                
-            // }
-
-            if (newInputRange[0] !== inputRange.value[0] || newInputRange[1] !== inputRange.value[1]){
-                inputRange.value = newInputRange;
-            }
-        // }
-        // return inputRange;
+        const inRangeValues = data
+            .slice(startIndex, endIndex)
+            .map(item => [item.low, item.high])
+            .flat();
+        maxMinArrage.value = {
+            max: Math.max(...inRangeValues),
+            min: Math.min(...inRangeValues),
+        };
+        const newInputRange = [maxMinArrage.value.min, maxMinArrage.value.max];
+        if (newInputRange[0] !== inputRange.value[0] || newInputRange[1] !== inputRange.value[1]){
+            inputRange.value = newInputRange;
+        }
     },[scrollOffset,caliber])
 
 
