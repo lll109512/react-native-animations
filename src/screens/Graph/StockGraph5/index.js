@@ -26,10 +26,12 @@ const styles = StyleSheet.create({
 
 const height = screen.width
 const width = screen.width
-export default () => {
-    const isActived = useSharedValue(false);
+export default (props) => {
     const caliber = 10;
-    const scrollOffset = useSharedValue(0);
+    const initStartIndex = data.length - (Math.floor(width / caliber) + 1);
+    const initEndIndex = data.length;
+    const isActived = useSharedValue(false);
+    const scrollOffset = useSharedValue(-initStartIndex * caliber);
     const contextX = useSharedValue(0);
     const scaleX = useSharedValue(1);
     const scaleContextX = useSharedValue(0);
@@ -38,16 +40,35 @@ export default () => {
     const lineTranslateX = useSharedValue(0);
     const lineTranslateY = useSharedValue(0);
 
-    const inputRange = useSharedValue([7505.65, 8453.31]);
     const startEndRange = useSharedValue([0, Math.floor(width / caliber) + 1]);
-    const maxMinArrage = useSharedValue({ max:0, min: 0 });
+    const maxMinArrage = useSharedValue({ max: 0, min: 0 });
+    
+    // initial caliber and numbers
+    const values = data
+                    .slice(initStartIndex, initEndIndex)
+                    .map(item => [item.low, item.high])
+                    .flat();
+    const domain = [Math.min(...values), Math.max(...values)];
+    const scaleY = scaleLinear().domain(domain).range([height, 0]);
+    const scaleBody = scaleLinear()
+                    .domain([0, domain[1] - domain[0]])
+                    .range([0, height]);
+    
+    const caliberWidth = useDerivedValue(() => {
+        return scaleX.value * caliber;
+    }, [scaleX]);
 
+    const numberInViewCandles = useDerivedValue(() => {
+        return Math.floor(width / caliberWidth.value) + 1;
+    }, [caliberWidth]);
+    
+    const inputRange = useSharedValue([domain[0], domain[1]]);
     const onGestureHandler = useAnimatedGestureHandler({
         onStart() {
             contextX.value = scrollOffset.value;
         },
         onActive(event) {
-            scrollOffset.value = Math.min(contextX.value + event.translationX, 0);
+            scrollOffset.value = Math.max(Math.min(contextX.value + event.translationX, 0), -caliberWidth.value * (data.length - numberInViewCandles.value))
         },
         onFinish() {
             contextX.value = 0;
@@ -90,7 +111,7 @@ export default () => {
 
     const onLongPressGestureHandler = useAnimatedGestureHandler({
         onStart(event) {
-            isActived.value = false
+            isActived.value = false;
         },
         onActive(event) {
             // console.log(event)
@@ -103,25 +124,9 @@ export default () => {
         },
     });
 
-    // initial caliber and numbers
-    const values = data
-        .slice(0, Math.floor(width / caliber) + 1)
-        .map(item => [item.low, item.high])
-        .flat();
-    const domain = [Math.min(...values), Math.max(...values)];
-    const scaleY = scaleLinear().domain(domain).range([height, 0]);
-    const scaleBody = scaleLinear()
-        .domain([0, domain[1] - domain[0]])
-        .range([0, height]);
-
-    const caliberWidth = useDerivedValue(()=>{
-        return scaleX.value * caliber
-    },[scaleX])
-
     useDerivedValue(() => {
-        const numberInViewCandles = Math.floor(width / caliberWidth.value) + 1;
         const startIndex = Math.floor(Math.abs(scrollOffset.value) / caliberWidth.value);
-        const endIndex = startIndex + numberInViewCandles;
+        const endIndex = startIndex + numberInViewCandles.value;
         if (startEndRange.value[0] !== startIndex || startEndRange.value[1] !== endIndex) {
             startEndRange.value = [startIndex, endIndex];
         } else {
@@ -165,17 +170,19 @@ export default () => {
         const translateXMin = interpolate(maxMinArrage.value.min, domain, [height, 0]);
         const scaleY = 1 / ((translateXMin - translateXMax) / height);
         // console.log(translateXMin - translateX, scaleY);
-        // console.log(
-        //     "scale",
-        //     "translatXMax:",
-        //     translateXMax,
-        //     "scaleY:",
-        //     scaleY,
-        //     "scaleX:",
-        //     scaleX,
-        //     "startEndRange:",
-        //     startEndRange
-        // );
+        console.log(
+            "scale",
+            "translatXMax:",
+            translateXMax,
+            "scaleY:",
+            scaleY,
+            "scaleX:",
+            scaleX.value,
+            "startEndRange:",
+            startEndRange,
+            "domain:",
+            domain
+        );
         return {
             transform: [
                 { translateX: Math.min(scrollOffset.value, 1) },
@@ -185,19 +192,8 @@ export default () => {
             ],
         };
     });
-
-    // const processedData = data.map((data, index) => [
-    //     caliber * index + 0.5 * caliber + 1,
-    //     scaleY(data.high),
-    // ]);
-    // const lineGrerator = line()
-    //     .x(d => d[0])
-    //     .y(d => d[1]);
-    // const d = lineGrerator(processedData);
-
-
     const rHorizontalLineStyle = useAnimatedStyle(() => {
-        const tranY = Math.max(Math.min(lineTranslateY.value, width), 0)
+        const tranY = Math.max(Math.min(lineTranslateY.value, width), 0);
         return {
             opacity: isActived.value ? withTiming(1) : withTiming(0),
             transform: [{ translateY: tranY }],
@@ -208,15 +204,20 @@ export default () => {
             Math.floor(Math.min(lineTranslateX.value, height) / caliberWidth.value) *
                 caliberWidth.value +
             caliberWidth.value / 2 +
-            (scrollOffset.value % caliberWidth.value) + MARGIN/2
+            (scrollOffset.value % caliberWidth.value) +
+            MARGIN / 2;
         return {
             opacity: isActived.value ? withTiming(1) : withTiming(0),
             transform: [{ translateX: tranX }],
         };
     });
-    const textValue = useDerivedValue(()=>{
-        return `${interpolate(lineTranslateY.value, [0, height], [inputRange.value[1], inputRange.value[0]]).toFixed(2)}`
-    })
+    const textValue = useDerivedValue(() => {
+        return `${interpolate(
+            lineTranslateY.value,
+            [0, height],
+            [inputRange.value[1], inputRange.value[0]]
+        ).toFixed(2)}`;
+    });
     return (
         <View style={styles.container}>
             <View style={{ height: 100 }}></View>
