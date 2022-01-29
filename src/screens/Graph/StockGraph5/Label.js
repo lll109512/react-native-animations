@@ -4,9 +4,9 @@ import Animated, { interpolate, useAnimatedProps, useAnimatedStyle, useDerivedVa
 import { ReText } from 'react-native-redash';
 
 const Label = (props) => {
-    const { textValue, translateY, width, isActived } = props;
+    const { textValue, translateY, height, isActived } = props;
     const rStyle = useAnimatedStyle(()=>{
-        const tranY = Math.max(Math.min(translateY.value, width), 0);
+        const tranY = Math.max(Math.min(translateY.value, height), 0);
         return {
             transform: [{ translateY: tranY }],
             opacity: isActived.value ? withTiming(1) : withTiming(0),

@@ -7,10 +7,11 @@ import data from "./data.json";
 import Svg, { G, Path } from 'react-native-svg';
 import Candle from './Candle';
 import { scaleLinear } from "d3-scale";
-import Animated,{ interpolate, useAnimatedProps, useAnimatedGestureHandler, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated,{ interpolate, useAnimatedProps, useAnimatedGestureHandler, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming, Extrapolate } from 'react-native-reanimated';
 import { line, area, curveCardinal } from "d3-shape";
 import Label from "./Label";
 import Line from "./Line";
+import AxisX from "./AxisX";
 const MARGIN = 2
 
 const AnimatedG = Animated.createAnimatedComponent(G)
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const height = screen.width
+const height = screen.width*0.8
 const width = screen.width
 export default (props) => {
     const caliber = 10;
@@ -62,7 +63,11 @@ export default (props) => {
         return Math.floor(width / caliberWidth.value) + 1;
     }, [caliberWidth]);
     
-    const inputRange = useSharedValue([domain[0], domain[1]]);
+    const inputRange = useSharedValue([0, 0]);
+    useEffect(()=>{
+        inputRange.value = [domain[0], domain[1]];
+        scrollOffset.value -= 1
+    },[domain])
     const onGestureHandler = useAnimatedGestureHandler({
         onStart() {
             contextX.value = scrollOffset.value;
@@ -170,19 +175,21 @@ export default (props) => {
         const translateXMin = interpolate(maxMinArrage.value.min, domain, [height, 0]);
         const scaleY = 1 / ((translateXMin - translateXMax) / height);
         // console.log(translateXMin - translateX, scaleY);
-        console.log(
-            "scale",
-            "translatXMax:",
-            translateXMax,
-            "scaleY:",
-            scaleY,
-            "scaleX:",
-            scaleX.value,
-            "startEndRange:",
-            startEndRange,
-            "domain:",
-            domain
-        );
+        // console.log(
+        //     "scale",
+        //     "translatXMax:",
+        //     translateXMax,
+        //     "scaleY:",
+        //     scaleY,
+        //     "scaleX:",
+        //     scaleX.value,
+        //     "startEndRange:",
+        //     startEndRange,
+        //     "domain:",
+        //     domain,
+        //     "maxMinArrage",
+        //     maxMinArrage
+        // );
         return {
             transform: [
                 { translateX: Math.min(scrollOffset.value, 1) },
@@ -192,16 +199,18 @@ export default (props) => {
             ],
         };
     });
+
     const rHorizontalLineStyle = useAnimatedStyle(() => {
-        const tranY = Math.max(Math.min(lineTranslateY.value, width), 0);
+        const tranY = Math.max(Math.min(lineTranslateY.value, height), 0);
         return {
             opacity: isActived.value ? withTiming(1) : withTiming(0),
             transform: [{ translateY: tranY }],
         };
     });
+
     const rVerticalLineStyle = useAnimatedStyle(() => {
         const tranX =
-            Math.floor(Math.min(lineTranslateX.value, height) / caliberWidth.value) *
+            Math.floor(Math.min(lineTranslateX.value, width) / caliberWidth.value) *
                 caliberWidth.value +
             caliberWidth.value / 2 +
             (scrollOffset.value % caliberWidth.value) +
@@ -215,19 +224,19 @@ export default (props) => {
         return `${interpolate(
             lineTranslateY.value,
             [0, height],
-            [inputRange.value[1], inputRange.value[0]]
+            [inputRange.value[1], inputRange.value[0]],Extrapolate.CLAMP
         ).toFixed(2)}`;
     });
     return (
         <View style={styles.container}>
             <View style={{ height: 100 }}></View>
             <View>
-                <Svg width={width} height={height}>
-                    <AnimatedG style={rStyle}>
-                        {candlesComponents}
-                        {/* <Path d={d} stroke={"white"} fill="transparent" /> */}
-                    </AnimatedG>
-                </Svg>
+                <>
+                    <Svg width={width} height={height}>
+                        <AnimatedG style={[rStyle]}>{candlesComponents}</AnimatedG>
+                    </Svg>
+                    <AxisX inputRange={inputRange} height={height} />
+                </>
                 <LongPressGestureHandler onGestureEvent={onLongPressGestureHandler}>
                     <Animated.View style={[StyleSheet.absoluteFill]}>
                         <PanGestureHandler onGestureEvent={onGestureHandler}>
@@ -254,7 +263,7 @@ export default (props) => {
                                             translateY={lineTranslateY}
                                             isActived={isActived}
                                             textValue={textValue}
-                                            width={width}
+                                            height={height}
                                         />
                                     </Animated.View>
                                 </PinchGestureHandler>
